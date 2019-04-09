@@ -1,7 +1,6 @@
 package fr.product_reco.service
 
-import fr.product_reco.domain.Client
-import fr.product_reco.domain.ClientId
+import fr.product_reco.domain.{Client, ClientId}
 
 import scala.concurrent.Future
 

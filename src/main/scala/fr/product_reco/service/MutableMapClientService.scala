@@ -3,7 +3,6 @@ package fr.product_reco.service
 import fr.product_reco.domain.{Client, ClientId}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 class MutableMapClientService extends ClientService {

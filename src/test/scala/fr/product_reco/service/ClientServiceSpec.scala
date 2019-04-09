@@ -1,18 +1,16 @@
 package fr.product_reco.service
 
-import org.scalatest._
-import fr.product_reco.domain.Client
-import fr.product_reco.domain.ClientId
-import org.scalatest.Matchers
+import fr.product_reco.domain.{Client, ClientId}
+import org.scalatest.{Matchers, _}
 
-import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 abstract class ClientServiceSpec extends AsyncFlatSpec with Matchers with BeforeAndAfterEach {
 
-  def createClientService: ClientService
-
   var clientService: ClientService = _
+
+  def createClientService: ClientService
 
   override implicit def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 

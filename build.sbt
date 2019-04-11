@@ -11,7 +11,8 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test,
     libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
-    libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.27"
+    libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.27",
+    libraryDependencies ++= Seq("com.typesafe.akka" %% "akka-http" % "10.1.7", "com.typesafe.akka" %% "akka-stream" % "2.5.19")
   )
 
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.

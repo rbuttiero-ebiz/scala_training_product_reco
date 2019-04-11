@@ -68,7 +68,7 @@ class ClosestClientRecommendationService(clientService: ClientService, orderServ
     logger.debug(s"Searching client for $refClient : $compareClient")
     val score = for {
       compareProductQuantities <- extractOrderedProducts(compareClient)
-    } yield scoreClientProducts(refClient, refProductQuantities.getOrElse(Map()), compareProductQuantities.getOrElse(Map()), compareClient)
+    } yield scoreClientProducts(refClient, compareClient, refProductQuantities.getOrElse(Map()), compareProductQuantities.getOrElse(Map()))
 
     score
   }
@@ -105,10 +105,18 @@ class ClosestClientRecommendationService(clientService: ClientService, orderServ
       .mapValues(_.map(_.qty).min) // And finally sum quantities in each List[OrderItem]
   }
 
-  def scoreClientProducts(refClient: Client, refProductQuantities: Map[ProductId, Int], compareProductQuantities: Map[ProductId, Int], compareClient: Client): ClientScored = {
+  def scoreClientProducts(refClient: Client, compareClient: Client, refProductQuantities: Map[ProductId, Int], compareProductQuantities: Map[ProductId, Int]): ClientScored = {
     val commonProductIds = refProductQuantities.keySet.intersect(compareProductQuantities.keySet)
-    val onlyInRedProductIds = refProductQuantities.keySet.diff(compareProductQuantities.keySet)
+    val onlyInRefProductIds = refProductQuantities.keySet.diff(compareProductQuantities.keySet)
     val onlyInCompareProductIds = compareProductQuantities.keySet.diff(refProductQuantities.keySet)
+
+    /*
+    logger.debug(s"Scoring for $refClient : $compareClient : refProductQuantities = $refProductQuantities")
+    logger.debug(s"Scoring for $refClient : $compareClient : compareProductQuantities = $compareProductQuantities")
+    logger.debug(s"Scoring for $refClient : $compareClient : commonProductIds = $commonProductIds")
+    logger.debug(s"Scoring for $refClient : $compareClient : onlyInRefProductIds = $onlyInRefProductIds")
+    logger.debug(s"Scoring for $refClient : $compareClient : onlyInCompareProductIds = $onlyInCompareProductIds")
+     */
 
     // sum of the quantities of products that are in both maps
     val sameCount = commonProductIds
@@ -116,7 +124,7 @@ class ClosestClientRecommendationService(clientService: ClientService, orderServ
       .toMap.values.sum
 
     // sum of the quantities for products that are not in both maps
-    val differentCount_onlyInRef = onlyInRedProductIds
+    val differentCount_onlyInRef = onlyInRefProductIds
       .map(productId => productId -> refProductQuantities(productId))
       .toMap.values.sum
 

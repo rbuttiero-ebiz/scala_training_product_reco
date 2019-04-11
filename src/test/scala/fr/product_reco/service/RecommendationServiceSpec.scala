@@ -30,5 +30,11 @@ abstract class RecommendationServiceSpec extends AsyncFlatSpec with Matchers wit
     } yield reco shouldBe Some(ProductId(4))
   }
 
+  "Recommendation Service" should "return handle Premium clients" in {
+    for {
+      reco <- recoService.computeRecommendation(ClientId(12))
+    } yield reco shouldBe None
+  }
+
 }
 

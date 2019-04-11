@@ -32,6 +32,7 @@ class MockOrderService extends OrderService {
     clientId match {
       case ClientId(1) => Some(List(order1_1, order1_2, order1_3))
       case ClientId(2) => Some(List(order2_1))
+      case ClientId(12) => Some(List(order2_1))
       case ClientId(3) => None
       case _ => None
     }

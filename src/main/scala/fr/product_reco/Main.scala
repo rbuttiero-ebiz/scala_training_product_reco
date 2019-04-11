@@ -23,7 +23,8 @@ object Main extends App {
     val clientIds = 1 to 100
 
     clientIds.foreach(clientId => {
-      val client = Client(ClientId(clientId.toLong))
+
+      val client = if(clientId % 4 == 0) PremiumClient(ClientId(clientId.toLong)) else StandardClient(ClientId(clientId.toLong))
       clientService.addClient(client)
 
       val orderCounter = 0 to r.nextInt(10)

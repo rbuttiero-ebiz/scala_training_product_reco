@@ -154,7 +154,21 @@ class ClosestClientRecommendationService(clientService: ClientService, orderServ
 
   def filterCloseClient(client: Client, clientScored: ClientScored): Boolean = {
     client.id != clientScored.client.id && // remove the original client
-      clientScored.hasMoreProducts // remove clients without other products
+      clientScored.hasMoreProducts && // remove clients without other products
+      (client match {
+        case PremiumClient(_) => filterClosePremiumClient(client, clientScored)
+        case _ => filterCloseStandardClient(client, clientScored)
+      })
+  }
+
+  def filterCloseStandardClient(client: Client, clientScored: ClientScored): Boolean = {
+    // no special rule for StandardClient
+    true
+  }
+
+  def filterClosePremiumClient(client: Client, clientScored: ClientScored): Boolean = {
+    // only match PremiumClient
+    clientScored.client.isInstanceOf[PremiumClient]
   }
 
   def extractRecommendedProduct(client: Client, closestClient: Client): Future[Option[ProductId]] = {
